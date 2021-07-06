@@ -1,0 +1,12 @@
+--- a/source/utils.c	2021-07-05 23:26:08.779967374 +0200
++++ b/source/utils.c	2021-07-05 23:26:36.889966332 +0200
+@@ -303,9 +303,6 @@
+                        "\n*            Shutting Down            *\n\n");
+         writeToLogFile("Out of memory!\n");
+         writeToLogFile("Allocation of size %i failed in function '%s' at %s:%i.\n", size, func, file, line);
+-#ifndef WIN
+-        writeToLogFile("Memory usage at exit: %u\n", mallinfo().arena);
+-#endif
+         exit(2);
+     }
+     return ptr;
