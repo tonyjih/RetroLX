@@ -1,0 +1,11 @@
+--- a/src/common/CMakeLists.txt	2021-08-13 14:09:11.661412037 +0200
++++ b/src/common/CMakeLists.txt	2021-08-13 14:09:25.437688070 +0200
+@@ -239,7 +239,7 @@
+     gl/context_egl_wayland.cpp
+     gl/context_egl_wayland.h
+   )
+-  target_compile_definitions(common PRIVATE "-DUSE_WAYLAND=1")
++  target_compile_definitions(common PRIVATE "-DUSE_WAYLAND=1" "-DEGL_NO_X11=1")
+   target_link_libraries(common PRIVATE Wayland::Egl)
+ endif()
+ 
