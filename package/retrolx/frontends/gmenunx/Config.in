@@ -1,0 +1,24 @@
+config BR2_PACKAGE_GMENUNX
+	bool "gmenunx"
+	select BR2_PACKAGE_LIBPNG
+	select BR2_PACKAGE_SDL
+	select BR2_PACKAGE_SDL_TTF
+	select BR2_PACKAGE_SDL_GFX
+	select BR2_PACKAGE_DEJAVU
+	select BR2_PACKAGE_FONTS_DROID
+	help
+	  A menu system for embedded devices, 
+          originally developed for the GP2X. 
+          Modernized for RetroFW and other systems under the name GMenuNX.
+
+          https://github.com/pingflood/gmenunx
+
+if BR2_PACKAGE_GMENUNX
+
+config BR2_PACKAGE_GMENUNX_SHOW_CLOCK
+	bool "Show clock"
+
+config BR2_PACKAGE_GMENUNX_CPUFREQ
+	bool "Support CPU frequency control"
+
+endif

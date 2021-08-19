@@ -19,6 +19,7 @@ config BR2_PACKAGE_RETROLX_PACKAGES
 	select BR2_PACKAGE_RETROLX_RETROARCH
 
 	# alternative frontends
+	#select BR2_PACKAGE_GMENUNX	# depends on sdl1.2
 	select BR2_PACKAGE_RETROFE
 	select BR2_PACKAGE_PEGASUS		if BR2_PACKAGE_RETROLX_QT
 
