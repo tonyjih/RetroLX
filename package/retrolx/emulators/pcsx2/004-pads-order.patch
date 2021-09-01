@@ -35,7 +35,9 @@ index 548b72e..fa4998f 100644
  // opens handles to all possible joysticks
  void JoystickInfo::EnumerateJoysticks(std::vector<std::unique_ptr<GamePad>>& vjoysticks)
  {
-@@ -64,9 +90,12 @@ void JoystickInfo::EnumerateJoysticks(std::vector<std::unique_ptr<GamePad>>& vjo
+--- a/pcsx2/PAD/Linux/SDL/joystick.cpp	2021-09-01 14:19:27.596270912 +0200
++++ b/pcsx2/PAD/Linux/SDL/joystick.cpp	2021-09-01 14:20:04.312940908 +0200
+@@ -90,9 +90,12 @@
  
  	vjoysticks.clear();
  
@@ -44,7 +46,7 @@ index 548b72e..fa4998f 100644
 +
  	for (int i = 0; i < SDL_NumJoysticks(); ++i)
  	{
--		vjoysticks.push_back(std::unique_ptr<GamePad>(new JoystickInfo(i)));
+-		vjoysticks.push_back(std::unique_ptr<Device>(new JoystickInfo(i)));
 +		vjoysticks.push_back(std::unique_ptr<GamePad>(new JoystickInfo(SDL_PADSORDERCONFIG[i])));
  		// Something goes wrong in the init, let's drop it
  		if (!vjoysticks.back()->IsProperlyInitialized())

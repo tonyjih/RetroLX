@@ -1,16 +1,14 @@
-diff --git a/pcsx2/PAD/Linux/PAD.h b/pcsx2/PAD/Linux/PAD.h
-index d5d8056..0cac1a0 100644
---- a/pcsx2/PAD/Linux/PAD.h
-+++ b/pcsx2/PAD/Linux/PAD.h
-@@ -15,7 +15,7 @@
+--- a/pcsx2/PAD/Linux/Global.h	2021-09-01 14:29:02.870778408 +0200
++++ b/pcsx2/PAD/Linux/Global.h	2021-09-01 14:29:22.523137618 +0200
+@@ -35,7 +35,7 @@
  
- #pragma once
+ #define PADdefs
  
--#define GAMEPAD_NUMBER 2 // numbers of gamepad
-+#define GAMEPAD_NUMBER 8 // numbers of gamepad
+-static const u32 GAMEPAD_NUMBER = 2;
++static const u32 GAMEPAD_NUMBER = 8;
+ static const u32 MAX_KEYS = 24;
  
- #include <wx/string.h>
- #include <wx/tokenzr.h>
+ #include "Config.h"
 diff --git a/pcsx2/PAD/Linux/state_management.cpp b/pcsx2/PAD/Linux/state_management.cpp
 index a077d00..1be3f24 100644
 --- a/pcsx2/PAD/Linux/state_management.cpp

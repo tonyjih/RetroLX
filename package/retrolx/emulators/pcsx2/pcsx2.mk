@@ -3,11 +3,11 @@
 # PCSX2
 #
 ################################################################################
-
-PCSX2_VERSION = 286b6448be332458c79f299736bb196ccc653659
+# Commits on Sep 1, 2021
+PCSX2_VERSION = bda80fc748037d708a7efb26d11087bfc0865309
 PCSX2_SITE = https://github.com/pcsx2/pcsx2.git
 PCSX2_LICENSE = GPLv2 GPLv3 LGPLv2.1 LGPLv3
-PCSX2_DEPENDENCIES = xserver_xorg-server alsa-lib freetype zlib libpng wxwidgets libaio portaudio libsoundtouch sdl2 libpcap yaml-cpp libgtk3 libsamplerate fmt
+PCSX2_DEPENDENCIES = xserver_xorg-server alsa-lib freetype zlib libpng wxwidgets libaio portaudio libsoundtouch sdl2 libpcap libgtk3 libsamplerate fmt
 
 PCSX2_SITE_METHOD = git
 PCSX2_GIT_SUBMODULES = YES
@@ -20,7 +20,7 @@ PCSX2_CONF_OPTS += -DPACKAGE_MODE=FALSE
 PCSX2_CONF_OPTS += -DwxWidgets_CONFIG_EXECUTABLE="$(STAGING_DIR)/usr/bin/wx-config"
 PCSX2_CONF_OPTS += -DPCSX2_TARGET_ARCHITECTURES=x86_64
 PCSX2_CONF_OPTS += -DENABLE_TESTS=OFF
-PCSX2_CONF_OPTS += -DUSE_SYSTEM_YAML=ON
+PCSX2_CONF_OPTS += -DUSE_SYSTEM_YAML=OFF
 PCSX2_CONF_OPTS += -DEXTRA_PLUGINS=TRUE
 #PCSX2_CONF_OPTS += -DwxUSE_UNICODE=0
 #PCSX2_CONF_OPTS += -DwxUSE_UNICODE_UTF8=0

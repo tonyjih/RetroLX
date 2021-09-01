@@ -15,7 +15,6 @@ config BR2_PACKAGE_PCSX2
 	select BR2_PACKAGE_SDL2
 	select BR2_PACKAGE_DEJAVU
 	select BR2_PACKAGE_LIBPCAP
-	select BR2_PACKAGE_YAML_CPP
 	select BR2_PACKAGE_LIBGTK3
         help
           A  pcsx2 emulator
