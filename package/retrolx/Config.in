@@ -269,7 +269,8 @@ config BR2_PACKAGE_RETROLX_COMPUTER_SYSTEMS
 	# Deprecated LinApple to be replaced....
 
 	# Commodore Amiga
-	select BR2_PACKAGE_FSUAE                if BR2_PACKAGE_RETROLX_IS_X86_ARCH
+	select BR2_PACKAGE_FSUAE                if BR2_x86_64 || BR2_i686
+	# wip arm/aarch64 and gles support if !BR2_arm1176jzf_s && !BR2_cortex_a7
 	select BR2_PACKAGE_AMIBERRY             if !BR2_PACKAGE_RETROLX_IS_X86_ARCH
 	select BR2_PACKAGE_LIBRETRO_PUAE        # ALL
 

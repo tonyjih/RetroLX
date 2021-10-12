@@ -1,0 +1,11 @@
+--- a/configure.ac	2021-10-10 13:04:38.000000000 +0200
++++ b/configure.ac	2021-10-12 00:16:57.847453141 +0200
+@@ -354,7 +354,7 @@
+ [mingw*], [],
+ [darwin*], [],
+ [
+-    X11_LIBS="-lX11"
++    X11_LIBS=""
+     AC_DEFINE([USE_X11], [1], [Define to 1 to use X11])
+ 
+ #    X11_LIBS="$X11_LIBS -lXtst"
