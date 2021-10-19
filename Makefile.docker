@@ -1,10 +1,10 @@
 PROJECT_DIR    := $(shell pwd)
 DL_DIR         ?= $(PROJECT_DIR)/dl
 OUTPUT_DIR     ?= $(PROJECT_DIR)/output
+REPO_DIR       ?= $(PROJECT_DIR)/repo
 CCACHE_DIR     ?= $(PROJECT_DIR)/buildroot-ccache
-LOCAL_MK	   ?= $(PROJECT_DIR)/batocera.mk
-EXTRA_PKGS	   ?=
-DOCKER_OPTS    ?=
+LOCAL_MK       ?= $(PROJECT_DIR)/batocera.mk
+EXTRA_PKGS     ?=
 MAKE_JLEVEL    ?= $(shell nproc)
 BATCH_MODE     ?=
 PARALLEL_BUILD ?=
@@ -20,8 +20,8 @@ ifndef BATCH_MODE
 	DOCKER_OPTS += -i
 endif
 
-DOCKER_REPO := batoceralinux
-IMAGE_NAME  := batocera.linux-build
+DOCKER_REPO := retrolx
+IMAGE_NAME  := retrolx-build
 
 TARGETS := $(sort $(shell find $(PROJECT_DIR)/configs/ -name 'b*' | sed -n 's/.*\/batocera-\(.*\)_defconfig/\1/p'))
 UID  := $(shell id -u)
@@ -43,24 +43,19 @@ vars:
 
 
 build-docker-image:
-	docker build . -t $(DOCKER_REPO)/$(IMAGE_NAME)
-	@touch .ba-docker-image-available
-
-.ba-docker-image-available:
-	@docker pull $(DOCKER_REPO)/$(IMAGE_NAME)
-	@touch .ba-docker-image-available
-
-batocera-docker-image: .ba-docker-image-available
+	@docker build . -t $(DOCKER_REPO)/$(IMAGE_NAME)
+	@touch .rl-docker-image-available
 
 update-docker-image:
-	-@rm .ba-docker-image-available > /dev/null
-	@$(MAKE) batocera-docker-image
+	-@rm .rl-docker-image-available > /dev/null
+	@$(MAKE) build-docker-image
 
 publish-docker-image:
 	@docker push $(DOCKER_REPO)/$(IMAGE_NAME):latest
 
 output-dir-%: %-supported
 	@mkdir -p $(OUTPUT_DIR)/$*
+	@mkdir -p $(REPO_DIR)/$*
 
 ccache-dir:
 	@mkdir -p $(CCACHE_DIR)
@@ -71,10 +66,9 @@ dl-dir:
 %-supported:
 	$(if $(findstring $*, $(TARGETS)),,$(error "$* not supported!"))
 
-%-clean: batocera-docker-image output-dir-%
+%-clean: build-docker-image output-dir-%
 	@docker run -t --init --rm \
 		-v $(PROJECT_DIR):/build \
-		-v $(DL_DIR):/build/buildroot/dl \
 		-v $(OUTPUT_DIR)/$*:/$* \
 		-v /etc/passwd:/etc/passwd:ro \
 		-v /etc/group:/etc/group:ro \
@@ -83,14 +77,13 @@ dl-dir:
 		$(DOCKER_REPO)/$(IMAGE_NAME) \
 		make O=/$* BR2_EXTERNAL=/build -C /build/buildroot clean
 
-%-config: batocera-docker-image output-dir-%
+%-config: build-docker-image output-dir-%
 	@cp -f $(PROJECT_DIR)/configs/batocera-$*_defconfig $(PROJECT_DIR)/configs/batocera-$*_defconfig-tmp
 	@for opt in $(EXTRA_OPTS); do \
 		echo $$opt >> $(PROJECT_DIR)/configs/batocera-$*_defconfig ; \
 	done
 	@docker run -t --init --rm \
 		-v $(PROJECT_DIR):/build \
-		-v $(DL_DIR):/build/buildroot/dl \
 		-v $(OUTPUT_DIR)/$*:/$* \
 		-v /etc/passwd:/etc/passwd:ro \
 		-v /etc/group:/etc/group:ro \
@@ -100,10 +93,9 @@ dl-dir:
 		make O=/$* BR2_EXTERNAL=/build -C /build/buildroot batocera-$*_defconfig
 	@mv -f $(PROJECT_DIR)/configs/batocera-$*_defconfig-tmp $(PROJECT_DIR)/configs/batocera-$*_defconfig
 
-%-build: batocera-docker-image %-config ccache-dir dl-dir
+%-build: build-docker-image %-config ccache-dir dl-dir
 	@docker run -t --init --rm \
 		-v $(PROJECT_DIR):/build \
-		-v $(DL_DIR):/build/buildroot/dl \
 		-v $(OUTPUT_DIR)/$*:/$* \
 		-v $(CCACHE_DIR):$(HOME)/.buildroot-ccache \
 		-u $(UID):$(GID) \
@@ -113,10 +105,9 @@ dl-dir:
 		$(DOCKER_REPO)/$(IMAGE_NAME) \
 		make $(MAKE_OPTS) O=/$* BR2_EXTERNAL=/build -C /build/buildroot $(CMD)
 
-%-source: batocera-docker-image %-config ccache-dir dl-dir
+%-source: build-docker-image %-config ccache-dir dl-dir
 	@docker run -t --init --rm \
 		-v $(PROJECT_DIR):/build \
-		-v $(DL_DIR):/build/buildroot/dl \
 		-v $(OUTPUT_DIR)/$*:/$* \
 		-v $(CCACHE_DIR):$(HOME)/.buildroot-ccache \
 		-u $(UID):$(GID) \
@@ -126,10 +117,9 @@ dl-dir:
 		$(DOCKER_REPO)/$(IMAGE_NAME) \
 		make $(MAKE_OPTS) O=/$* BR2_EXTERNAL=/build -C /build/buildroot source
 
-%-kernel: batocera-docker-image %-config ccache-dir dl-dir
+%-kernel: build-docker-image %-config ccache-dir dl-dir
 	@docker run -t --init --rm \
 		-v $(PROJECT_DIR):/build \
-		-v $(DL_DIR):/build/buildroot/dl \
 		-v $(OUTPUT_DIR)/$*:/$* \
 		-v $(CCACHE_DIR):$(HOME)/.buildroot-ccache \
 		-u $(UID):$(GID) \
@@ -139,10 +129,9 @@ dl-dir:
 		$(DOCKER_REPO)/$(IMAGE_NAME) \
 		make $(MAKE_OPTS) O=/$* BR2_EXTERNAL=/build -C /build/buildroot linux-menuconfig
 
-%-graph-depends: batocera-docker-image %-config ccache-dir dl-dir
+%-graph-depends: build-docker-image %-config ccache-dir dl-dir
 	@docker run -it --init --rm \
 		-v $(PROJECT_DIR):/build \
-		-v $(DL_DIR):/build/buildroot/dl \
 		-v $(OUTPUT_DIR)/$*:/$* \
 		-v $(CCACHE_DIR):$(HOME)/.buildroot-ccache \
 		-u $(UID):$(GID) \
@@ -152,11 +141,10 @@ dl-dir:
 		$(DOCKER_REPO)/$(IMAGE_NAME) \
 		make O=/$* BR2_EXTERNAL=/build BR2_GRAPH_OUT=svg -C /build/buildroot graph-depends
 
-%-shell: batocera-docker-image output-dir-%
+%-shell: build-docker-image output-dir-%
 	$(if $(BATCH_MODE),$(error "not suppoorted in BATCH_MODE!"),)
 	@docker run -t --init --rm \
 		-v $(PROJECT_DIR):/build \
-		-v $(DL_DIR):/build/buildroot/dl \
 		-v $(OUTPUT_DIR)/$*:/$* \
 		-w /$* \
 		-v $(CCACHE_DIR):$(HOME)/.buildroot-ccache \

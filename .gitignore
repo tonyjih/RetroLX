@@ -1,6 +1,7 @@
 gh_token
 /output
 /dl
+/repo
 /.auto.deps
 /.config.cmd
 /.config.old
@@ -20,9 +21,9 @@ Thumbs.db
 authorized_keys
 libretro-mame-tiny
 /buildroot-ccache
-/.ba-docker-image-available
+/.rl-docker-image-available
 *.code-workspace
 batocera.mk
 .vscode/*
 make.log
-package/batocera/emulationstation/batocera-emulationstation/keys.txt
+package/batocera/emulationstation/retrolx-emulationstation/keys.txt
