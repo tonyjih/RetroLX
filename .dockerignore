@@ -1,3 +1,10 @@
+.git/
+board/
+buildroot/
 buildroot-ccache/
+config/
+package/
+scripts/
 output/
 dl/
+repo/
