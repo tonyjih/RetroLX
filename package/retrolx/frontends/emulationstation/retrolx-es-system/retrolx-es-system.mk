@@ -4,9 +4,11 @@
 #
 ################################################################################
 
-RETROLX_ES_SYSTEM_DEPENDENCIES = host-python3 host-python-pyyaml retrolx-configgen
+RETROLX_ES_SYSTEM_DEPENDENCIES = host-python3 host-python-pyyaml retrolx-configgen retrolx-emulationstation es-theme-carbon es-background-musics
 RETROLX_ES_SYSTEM_SOURCE=
-RETROLX_ES_SYSTEM_VERSION=1.03
+RETROLX_ES_SYSTEM_VERSION=1.04
+
+RETROLX_ES_SYSTEM_PKG_DIR = $(TARGET_DIR)/opt/retrolx/retrolx-es-system
 
 define RETROLX_ES_SYSTEM_BUILD_CMDS
 	$(HOST_DIR)/bin/python \
